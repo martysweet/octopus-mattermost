@@ -136,7 +136,7 @@ def main():
     buffer += f"| :sunny:  | {fmt_price(int_peak_price)} | {int_peak_kwh} | {fmt_price(int_peak_cost)} |\n"
     buffer += f"| :crescent_moon:  | {fmt_price(int_off_peak_price)} | {int_off_peak_kwh} | {fmt_price(int_off_peak_cost)} |\n"
     buffer += f"| :person_doing_cartwheel:  | - | - | {fmt_price(int_standing_charge)} |\n"
-    buffer += f"| Total | - | {total_kwh_usage} | **{fmt_price(int_total_cost)}** ({fmt_price(int_total_avg)}/kWh) |\n"
+    buffer += f"| Total | - | {total_kwh_usage} | **{fmt_price(int_total_cost)}** |\n"
 
     # Compare with AGILE average and FLEXIBLE tarrifs
     buffer += f"\n\n"

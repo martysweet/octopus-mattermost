@@ -101,28 +101,32 @@ def main():
     off_peak_kwh = round(off_peak_kwh, 2)
 
     # Calculate price and round
-    peak_price = round(peak_kwh * get_intelligent_rates()['peak'], 2)
-    off_peak_price = round(off_peak_kwh * get_intelligent_rates()['off_peak'], 2)
+    intelligent_peak_price = round(get_intelligent_rates()['peak'], 2)
+    intelligent_off_peak_price = round(get_intelligent_rates()['off_peak'], 2)
+    intelligent_standing_price = round(get_intelligent_rates()['standing'], 2)
 
-    total_price = round(peak_price + off_peak_price + get_intelligent_rates()['standing'], 2)
+    peak_cost = round(peak_kwh * intelligent_peak_price, 2)
+    off_peak_cost = round(off_peak_kwh * intelligent_off_peak_price, 2)
+
+    total_cost = round(peak_cost + off_peak_cost + intelligent_standing_price, 2)
     total_kwh = peak_kwh + off_peak_kwh
-    avg_price_per_kwh = round(total_price / total_kwh, 2)
+    avg_price_per_kwh = round(total_cost / total_kwh, 2)
 
     # Create a markdown table for the above
     buffer = f"Energy breakdown for {YESTERDAY} (Intelligent Tariff)\n\n"
     buffer += f"|  | £/kWh | kWh | £ |\n"
     buffer += f"| --- | --- | --- | --- |\n"
-    buffer += f"| :sunny:  | £{round(get_intelligent_rates()['peak'], 2)} | {peak_kwh} | £{peak_price} |\n"
-    buffer += f"| :crescent_moon:  | £{round(get_intelligent_rates()['off_peak'], 2)} | {off_peak_kwh} | £{off_peak_price} |\n"
-    buffer += f"| :person_doing_cartwheel:  | - | - | £{round(get_intelligent_rates()['standing'], 2)} |\n"
-    buffer += f"| Total | - | { total_kwh } | **£{total_price}** (£{avg_price_per_kwh}/kWh) |\n"
+    buffer += f"| :sunny:  | {fmt_price(intelligent_peak_price)} | {peak_kwh} | {fmt_price(peak_cost)} |\n"
+    buffer += f"| :crescent_moon:  | {fmt_price(intelligent_off_peak_price)} | {off_peak_kwh} | {fmt_price(off_peak_cost)} |\n"
+    buffer += f"| :person_doing_cartwheel:  | - | - | {fmt_price(intelligent_standing_price)} |\n"
+    buffer += f"| Total | - | { total_kwh } | **{fmt_price(total_cost) }** ({fmt_price(avg_price_per_kwh)}/kWh) |\n"
 
     # Compare with AGILE average and FLEXIBLE tarrifs
     buffer += f"\n\n"
 
     # Intelligent
     intelligent_rate = round(avg_price_per_kwh, 2)
-    intelligent_total = total_price
+    intelligent_total = total_cost
 
     # Agile
     agile_rate = round(get_agile_kwh_rate(), 2)

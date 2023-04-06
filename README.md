@@ -9,3 +9,14 @@ This AWS Lambda Function does the following:
 ## Usage
 - Change the provider.tf state bucket configuration
 - Rename template.tfvars to terraform.tfvars and include your own values
+
+## Deployment
+```
+cd terraform
+
+<Add AWS Creds to CLI/SSO>
+
+terraform init
+terraform plan
+terraform apply
+```

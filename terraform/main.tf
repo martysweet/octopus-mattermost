@@ -1,7 +1,7 @@
 resource "aws_lambda_function" "lambda_function" {
   function_name    = var.function_name
   handler          = "main.lambda_handler"
-  runtime          = "python3.8"
+  runtime          = "python3.9"
   memory_size      = "256"
   timeout          = "10"
   filename         = data.archive_file.lambda_function.output_path

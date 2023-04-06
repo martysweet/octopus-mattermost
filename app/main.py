@@ -1,5 +1,4 @@
 import requests
-import datetime
 import os
 from zoneinfo import ZoneInfo
 from datetime import datetime, timedelta
@@ -110,7 +109,7 @@ def main():
     avg_price_per_kwh = round(total_price / total_kwh, 2)
 
     # Create a markdown table for the above
-    buffer = f"Energy breakdown for {YESTERDAY} (Intelligent Tariff)\n"
+    buffer = f"Energy breakdown for {YESTERDAY} (Intelligent Tariff)\n\n"
     buffer += f"|  | £/kWh | kWh | £ |\n"
     buffer += f"| --- | --- | --- | --- |\n"
     buffer += f"| :sunny:  | £{round(get_intelligent_rates()['peak'], 2)} | {peak_kwh} | £{peak_price} |\n"
@@ -137,11 +136,11 @@ def main():
     flexible_total = round((flexible_rate * total_kwh) + flexible_standing, 2)
     flexible_diff = round((flexible_total - intelligent_total) / intelligent_total * 100, 2)
 
-    buffer += f"*Comparison with other tariffs*\n"
+    buffer += f"*Comparison with other tariffs*\n\n"
     buffer += f"| Tariff | £/kWh | £ + :person_doing_cartwheel: | :money_with_wings: |\n"
     buffer += f"| --- | --- | --- | --- |\n"
     # calculate percentage difference compared to intelligent
-    buffer += f"| AGILE | {fmt_price(agile_rate)} | {fmt_price(agile_total)} | {agile_diff}% |\n"
+    buffer += f"| AGILE | {fmt_price(agile_rate)} (avg) | {fmt_price(agile_total)} | {agile_diff}% |\n"
     buffer += f"| FLEXIBLE | {fmt_price(flexible_rate)} | {fmt_price(flexible_total)} | {flexible_diff}% |\n"
     buffer += f"| **INTELLIGENT** | **{fmt_price(intelligent_rate)}** | **{fmt_price(intelligent_total)}** | **-** |\n"
 

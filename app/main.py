@@ -111,9 +111,16 @@ def calculate_peak_off_kwh_and_cost(consumption_slots, unit_slots, peak):
 
 def main():
     # Get yesterday's consumption
-    consumption_slots = SlotMapper()
-    consumption_slots.map_from_sparse(get_day_consumption(), "interval_start", "consumption")
+    try:
+        consumption_slots = SlotMapper()
+        consumption_slots.map(get_day_consumption(), "interval_start", "consumption")
+    except ValueError as e:
+        print("No consumption data for yesterday")
+        buffer = f"Energy breakdown for {YESTERDAY} (Intelligent Tariff)\n\n"
+        buffer += f":fire: :fire: **Not enough consumption data available.** {e} :fire: :fire:"
+        return buffer
 
+    # Get the standard intelligent unit rates for the day
     intelligent_unit_slots = SlotMapper()
     intelligent_unit_slots.map_from_sparse(get_standard_unit_rates(INTELLIGENT_TARIFF), "valid_from", "value_inc_vat")
 
@@ -170,7 +177,6 @@ def main():
     buffer += f"| **INTELLIGENT** | **{fmt_price(int_total_avg)}** | **{fmt_price(int_total_cost)}** | **-** |\n"
 
     return buffer
-
 
 def upload_to_mattermost(text):
     headers = {

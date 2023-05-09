@@ -6,12 +6,21 @@
 class SlotMapper:
 
     slots = []
-
+    expected_size = 48
 
     def __init__(self, default=-1):
-        self.slots = [default] * 48
+        self.slots = [default] * self.expected_size
+
+    def map(self, dataset, ts_key, value_key):
+        if len(dataset) != self.expected_size:
+            raise ValueError(f"Dataset length is {len(dataset)}, expected {self.expected_size} items")
+
+        return self.__mapper__(dataset, ts_key, value_key)
 
     def map_from_sparse(self, sparse_dataset, ts_key, value_key):
+        self.__mapper__(sparse_dataset, ts_key, value_key)
+
+    def __mapper__(self, sparse_dataset, ts_key, value_key):
         # Order the data by timestamp, with the oldest first
         ordered_dataset = sorted(sparse_dataset, key=lambda k: k[ts_key])
 
@@ -36,20 +45,6 @@ class SlotMapper:
         for i in range(1, len(self.slots)):
             if self.slots[i] == -1:
                 self.slots[i] = self.slots[i - 1]
-
-
-
-    def map(self, ordered_dataset, value_key):
-
-        if len(ordered_dataset) != 48:
-            raise Exception("Data set is not 48 items long")
-
-        # Map data into slots
-        i = 0
-        for data in ordered_dataset:
-            print(data)
-            self.slots[i] = data[value_key]
-            i += 1
 
     def get(self):
         return self.slots
